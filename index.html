@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queens Puzzle Clone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Queens</h1>
+            <div class="controls">
+                <button id="btn-size-5">5x5</button>
+                <button id="btn-size-6" class="active">6x6</button>
+                <button id="btn-size-7">7x7</button>
+                <button id="btn-size-8">8x8</button>
+                <button id="btn-size-9">9x9</button>
+                <button id="btn-size-10">10x10</button>
+            </div>
+            <div class="status-bar">
+                <span id="timer">00:00</span>
+                <button id="btn-restart">Restart</button>
+            </div>
+        </header>
+        
+        <main>
+            <div id="game-board" class="board"></div>
+            <div id="loading" class="hidden">Generating Level...</div>
+            <div id="win-message" class="hidden">
+                <h2>Puzzle Solved!</h2>
+                <p>Time: <span id="win-time"></span></p>
+                <button id="btn-next">Next Puzzle</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- SVG Definitions for Use in Game -->
+    <svg style="display:none;">
+        <symbol id="icon-queen" viewBox="0 0 24 24" fill="currentColor">
+            <!-- Simple Crown SVG -->
+            <path d="M22 6l-4.5 4.5L12 3 6.5 10.5 2 6v13h20V6zm-2 11H4v-4.5l3.5 3L12 8l4.5 7.5 3.5-3v4.5z"/>
+        </symbol>
+        <symbol id="icon-cross" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Simple X SVG -->
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </symbol>
+    </svg>
+
+    <script src="logic.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
