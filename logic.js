@@ -175,6 +175,19 @@ class QueensLogic {
             if (!queens) continue;
 
             let regionsMap = this.generateRegionsFromQueens(queens);
+            
+            let regionCounts = new Array(this.size).fill(0);
+            for (let r = 0; r < this.size; r++) {
+                for (let c = 0; c < this.size; c++) {
+                    regionCounts[regionsMap[r][c]]++;
+                }
+            }
+            let singleCellCount = 0;
+            for (let count of regionCounts) {
+                if (count === 1) singleCellCount++;
+            }
+            if (singleCellCount > 1) continue;
+
             let solCount = this.countSolutions(regionsMap);
 
             if (solCount === 1) {
