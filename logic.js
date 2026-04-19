@@ -117,6 +117,67 @@ class QueensLogic {
         return regionsMap;
     }
 
+    smudgeRegions(regionsMap, queens, iterations) {
+        const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        for (let i = 0; i < iterations; i++) {
+            let r = Math.floor(Math.random() * this.size);
+            let c = Math.floor(Math.random() * this.size);
+            
+            let isQueen = false;
+            for(let row=0; row<this.size; row++){
+                if(row === r && queens[row] === c) isQueen = true;
+            }
+            if(isQueen) continue;
+
+            let d = dirs[Math.floor(Math.random() * dirs.length)];
+            let ar = r + d[0];
+            let ac = c + d[1];
+            
+            if (ar >= 0 && ar < this.size && ac >= 0 && ac < this.size) {
+                let regionA = regionsMap[r][c];
+                let regionB = regionsMap[ar][ac];
+                
+                if (regionA !== regionB) {
+                    regionsMap[r][c] = regionB;
+                    let queenRowA = regionA;
+                    let queenColA = queens[regionA];
+                    if (!this.checkContiguous(regionsMap, regionA, queenRowA, queenColA)) {
+                        regionsMap[r][c] = regionA;
+                    }
+                }
+            }
+        }
+    }
+
+    checkContiguous(regionsMap, regionId, queenRow, queenCol) {
+        let totalCells = 0;
+        for (let r = 0; r < this.size; r++) {
+            for (let c = 0; c < this.size; c++) {
+                if (regionsMap[r][c] === regionId) totalCells++;
+            }
+        }
+        let visited = new Set();
+        let queue = [{r: queenRow, c: queenCol}];
+        visited.add(`${queenRow},${queenCol}`);
+        let reached = 0;
+        const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        while (queue.length > 0) {
+            let curr = queue.shift();
+            reached++;
+            for (let d of dirs) {
+                let nr = curr.r + d[0];
+                let nc = curr.c + d[1];
+                if (nr >= 0 && nr < this.size && nc >= 0 && nc < this.size) {
+                    if (regionsMap[nr][nc] === regionId && !visited.has(`${nr},${nc}`)) {
+                        visited.add(`${nr},${nc}`);
+                        queue.push({r: nr, c: nc});
+                    }
+                }
+            }
+        }
+        return reached === totalCells;
+    }
+
     /**
      * Solves the board specifically with region constraints to find the number of solutions.
      */
@@ -175,6 +236,8 @@ class QueensLogic {
             if (!queens) continue;
 
             let regionsMap = this.generateRegionsFromQueens(queens);
+            
+            this.smudgeRegions(regionsMap, queens, 2000);
             
             let regionCounts = new Array(this.size).fill(0);
             for (let r = 0; r < this.size; r++) {
